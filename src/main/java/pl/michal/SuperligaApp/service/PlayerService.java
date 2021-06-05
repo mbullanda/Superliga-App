@@ -26,4 +26,8 @@ public class PlayerService {
     public Player getPlayerById(Long id) {
         return playerRepository.findById(id).orElseThrow( () -> new MissingPlayerException(id));
     }
+
+    public Player createPlayer(Player playerToCreate) {
+        return playerRepository.save(playerToCreate);
+    }
 }

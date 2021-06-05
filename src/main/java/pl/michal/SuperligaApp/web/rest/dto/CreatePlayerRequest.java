@@ -20,8 +20,6 @@ public class CreatePlayerRequest {
     @Min(value = 1, message = "Number cannot be lower than 1")
     @Max(value = 99, message = "Number must be lower than 100")
     private int number;
-    private int goals;
-    private int assists;
     private long clubId;
 
 }

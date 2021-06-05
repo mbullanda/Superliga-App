@@ -13,9 +13,7 @@ public class CreateClubRequest {
 
     @NotBlank(message = "Name cannot be blank")
     private String name;
-    private int points;
-    private int goalsScored;
-    private int goalsConceded;
+
 
 
 }

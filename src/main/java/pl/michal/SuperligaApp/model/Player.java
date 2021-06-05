@@ -25,4 +25,12 @@ public class Player {
 
     @ManyToOne
     private Club club;
+
+
+    public void addGoals(int goals){
+        setGoals(getGoals() + goals);
+    }
+    public void addAssists(int assists){
+        setAssists(getAssists() + assists);
+    }
 }

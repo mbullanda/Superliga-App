@@ -29,4 +29,8 @@ public class ClubService {
     public boolean existsById(Long id){
         return clubRepository.existsById(id);
     }
+
+    public Club save(Club clubById) {
+        return clubRepository.save(clubById);
+    }
 }

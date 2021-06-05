@@ -22,4 +22,8 @@ public class ClubService {
     public List<Club> getAllClubs() {
         return clubRepository.findAll();
     }
+
+    public Club createClub(Club clubToCreate) {
+        return clubRepository.save(clubToCreate);
+    }
 }

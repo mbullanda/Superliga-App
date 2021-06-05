@@ -13,12 +13,11 @@ import pl.michal.SuperligaApp.model.Club;
 import pl.michal.SuperligaApp.model.Player;
 import pl.michal.SuperligaApp.service.ClubService;
 import pl.michal.SuperligaApp.service.PlayerService;
-import pl.michal.SuperligaApp.web.rest.dto.ClubResponse;
-import pl.michal.SuperligaApp.web.rest.dto.CreateClubRequest;
-import pl.michal.SuperligaApp.web.rest.dto.CreatePlayerRequest;
-import pl.michal.SuperligaApp.web.rest.dto.PlayerResponse;
+import pl.michal.SuperligaApp.web.rest.dto.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -33,6 +32,8 @@ public class ClubController {
     private final PlayerToPlayerResponseMapper playerMapper;
     private final ClubToClubResponseMapper clubMapper;
     private final CreateClubRequestToClubMapper createClubRequestToClubMapper;
+
+    //mappery przenieść do serwisu
 
     @GetMapping("/club/{clubId}")
     @ResponseStatus(HttpStatus.OK)
@@ -53,6 +54,30 @@ public class ClubController {
                 .collect(Collectors.toList());
     }
 
+    @GetMapping("/rank")
+    @ResponseStatus(HttpStatus.OK)
+    public List<String> getClubRank(){
+        List<Club> clubs = clubService.getAllClubs().stream()
+                .sorted(Comparator.comparing(Club::getPoints, Comparator.reverseOrder()))
+                .collect(Collectors.toList());
+        List<String> clubRank= new ArrayList<>();
+        for (int i = 0; i < clubs.size(); i++){
+            StringBuilder sb = new StringBuilder();
+            Club club = clubs.get(i);
+            sb.append(i+1)
+                    .append(". ")
+                    .append(club.getName())
+                    .append(" ")
+                    .append(club.getPoints())
+                    .append(" ")
+                    .append(club.getGoalsScored())
+                    .append("-")
+                    .append(club.getGoalsConceded());
+            clubRank.add(sb.toString());
+        }
+        return clubRank;
+    }
+
     @PostMapping
     public ResponseEntity<?> createClub(@RequestBody @Valid CreateClubRequest request, BindingResult bindingResult){
         if (bindingResult.hasFieldErrors()){
@@ -65,4 +90,17 @@ public class ClubController {
         Club clubToCreate = createClubRequestToClubMapper.toClub(request);
         return new ResponseEntity<>(clubMapper.toResponse(clubService.createClub(clubToCreate)), HttpStatus.CREATED);
     }
+
+    @PutMapping({"/{id}"})
+    public ResponseEntity<?> addMatch(@RequestBody @Valid AddMatchRequest request, @PathVariable Long id){
+        //przenieść metodę do serwisu
+        if (!clubService.existsById(id)){
+            return ResponseEntity.notFound().build();
+        }
+        Club clubById = clubService.findById(id);
+        clubById.updateGoalsAndAddPoints(request.getGoalsScored(), request.getGoalsConceded());
+        clubService.save(clubById);
+        return ResponseEntity.noContent().build();
+    }
+
 }

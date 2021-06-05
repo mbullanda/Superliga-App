@@ -34,4 +34,15 @@ public class Club {
     public void addPlayer(Player player){
         players.add(player);
     }
+
+    public void updateGoalsAndAddPoints(int goalsScored, int goalsConceded){
+        setGoalsScored(getGoalsScored() + goalsScored);
+        setGoalsConceded(getGoalsConceded() + goalsConceded);
+        if (goalsScored > goalsConceded){
+            setPoints(getPoints() + 3);
+        } else if (goalsScored == goalsConceded){
+            setPoints(getPoints() + 1);
+        }
+    }
+
 }

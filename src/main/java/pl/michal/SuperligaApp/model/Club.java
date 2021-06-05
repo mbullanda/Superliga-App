@@ -30,4 +30,8 @@ public class Club {
     @OneToMany(mappedBy = "club")
     @Builder.Default
     private Set<Player> players = new HashSet<>();
+
+    public void addPlayer(Player player){
+        players.add(player);
+    }
 }

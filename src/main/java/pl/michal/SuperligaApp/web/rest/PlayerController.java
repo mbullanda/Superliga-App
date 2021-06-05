@@ -6,11 +6,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
+import pl.michal.SuperligaApp.exception.MissingPlayerException;
 import pl.michal.SuperligaApp.mapper.CreatePlayerRequestToPlayerMapper;
 import pl.michal.SuperligaApp.mapper.PlayerToPlayerResponseMapper;
 import pl.michal.SuperligaApp.model.Player;
 import pl.michal.SuperligaApp.service.ClubService;
 import pl.michal.SuperligaApp.service.PlayerService;
+import pl.michal.SuperligaApp.web.rest.dto.AddGoalsAndAssistsRequest;
 import pl.michal.SuperligaApp.web.rest.dto.CreatePlayerRequest;
 import pl.michal.SuperligaApp.web.rest.dto.PlayerResponse;
 
@@ -57,6 +59,18 @@ public class PlayerController {
         playerToCreate.setClub(clubService.findById(request.getClubId()));
         playerToCreate.getClub().getPlayers().add(playerToCreate);
         return new ResponseEntity<>(playerMapper.toResponse(playerService.createPlayer(playerToCreate)), HttpStatus.CREATED);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> addGoalsAndAssistsToPlayer(@PathVariable Long id, @RequestBody @Valid AddGoalsAndAssistsRequest request){
+        if(!playerService.existsById(id)){
+            return ResponseEntity.notFound().build();
+        }
+        Player playerById = playerService.getPlayerById(id);
+        playerById.addGoals(request.getGoals());
+        playerById.addAssists(request.getAssists());
+        playerService.savePLayer(playerById);
+        return ResponseEntity.noContent().build();
     }
 
 }

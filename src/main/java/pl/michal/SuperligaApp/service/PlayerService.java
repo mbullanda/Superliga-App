@@ -30,4 +30,12 @@ public class PlayerService {
     public Player createPlayer(Player playerToCreate) {
         return playerRepository.save(playerToCreate);
     }
+
+    public boolean existsById(Long id){
+        return playerRepository.existsById(id);
+    }
+
+    public Player savePLayer(Player playerById) {
+        return playerRepository.save(playerById);
+    }
 }

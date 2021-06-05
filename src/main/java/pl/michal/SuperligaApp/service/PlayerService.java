@@ -2,6 +2,7 @@ package pl.michal.SuperligaApp.service;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import pl.michal.SuperligaApp.exception.MissingPlayerException;
 import pl.michal.SuperligaApp.model.Player;
 import pl.michal.SuperligaApp.repository.PlayerRepository;
 import pl.michal.SuperligaApp.web.rest.dto.PlayerResponse;
@@ -20,5 +21,9 @@ public class PlayerService {
 
     public List<Player> getPlayersByClubId(Long clubId) {
         return playerRepository.findByClubId(clubId);
+    }
+
+    public Player getPlayerById(Long id) {
+        return playerRepository.findById(id).orElseThrow( () -> new MissingPlayerException(id));
     }
 }

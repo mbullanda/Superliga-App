@@ -2,10 +2,7 @@ package pl.michal.SuperligaApp.model;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 

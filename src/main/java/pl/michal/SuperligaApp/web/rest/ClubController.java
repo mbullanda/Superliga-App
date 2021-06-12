@@ -33,8 +33,6 @@ public class ClubController {
     private final ClubToClubResponseMapper clubMapper;
     private final CreateClubRequestToClubMapper createClubRequestToClubMapper;
 
-    //mappery przenieść do serwisu
-
     @GetMapping("/club/{clubId}")
     @ResponseStatus(HttpStatus.OK)
     public List<PlayerResponse> getPlayersByClubId(@PathVariable Long clubId){
@@ -57,6 +55,7 @@ public class ClubController {
     @GetMapping("/rank")
     @ResponseStatus(HttpStatus.OK)
     public List<String> getClubRank(){
+        //method to have table view in postman
         List<Club> clubs = clubService.getAllClubs().stream()
                 .sorted(Comparator.comparing(Club::getPoints, Comparator.reverseOrder()))
                 .collect(Collectors.toList());
@@ -93,12 +92,11 @@ public class ClubController {
 
     @PutMapping({"/{id}"})
     public ResponseEntity<?> addMatch(@RequestBody @Valid AddMatchRequest request, @PathVariable Long id){
-        //przenieść metodę do serwisu
         if (!clubService.existsById(id)){
             return ResponseEntity.notFound().build();
         }
         Club clubById = clubService.findById(id);
-        clubById.updateGoalsAndAddPoints(request.getGoalsScored(), request.getGoalsConceded());
+        clubById.updateGoalsAndAddPoints(request.getGoalsHomeTeam(), request.getGoalsAwayTeam());
         clubService.save(clubById);
         return ResponseEntity.noContent().build();
     }

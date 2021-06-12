@@ -9,8 +9,8 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@EqualsAndHashCode(exclude = "club")
-@ToString(exclude = "club")
+@EqualsAndHashCode(exclude = {"club", "user"})
+@ToString(exclude = {"club", "user"})
 public class Player {
 
     @Id
@@ -25,6 +25,9 @@ public class Player {
 
     @ManyToOne
     private Club club;
+
+    @OneToOne
+    private User user;
 
 
     public void addGoals(int goals){

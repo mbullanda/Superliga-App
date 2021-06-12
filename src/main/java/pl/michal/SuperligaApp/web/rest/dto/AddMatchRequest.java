@@ -11,7 +11,7 @@ import javax.validation.constraints.Min;
 @AllArgsConstructor
 public class AddMatchRequest {
     @Min(value = 0, message = "Goals cannot be lower than 0")
-    int goalsScored;
+    int goalsHomeTeam;
     @Min(value = 0, message = "Goals cannot be lower than 0")
-    int goalsConceded;
+    int goalsAwayTeam;
 }
